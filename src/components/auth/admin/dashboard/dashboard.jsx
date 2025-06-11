@@ -1,32 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchContacts, submitArticle } from '../../../../services/Model.js'; // Pastikan path-nya sesuai
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Ambil data admin dari localStorage
   const adminStr = localStorage.getItem('admin');
   const admin = adminStr ? JSON.parse(adminStr) : null;
 
+  // Redirect ke login jika belum login
   useEffect(() => {
     if (!admin) {
       navigate('/NaraStocksm/admin/login');
     }
   }, [admin, navigate]);
 
+  // Fetch data contacts dari backend
   useEffect(() => {
-    const getContacts = async () => {
+    const fetchContacts = async () => {
       try {
-        const data = await fetchContacts();
-        setContacts(data);
+        const res = await fetch('https://naradev-backendup-production.up.railway.app/contacts');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.data)) {
+          setContacts(data.data);
+        } else {
+          setContacts([]);
+        }
       } catch (err) {
         setContacts([]);
       }
       setLoading(false);
     };
-    getContacts();
+    fetchContacts();
   }, []);
 
   const [article, setArticle] = useState({
@@ -38,17 +45,30 @@ export default function AdminDashboard() {
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
+  // Handler input artikel
   const handleArticleChange = (e) => {
     setArticle({ ...article, [e.target.name]: e.target.value });
   };
 
+  // Submit artikel
   const handleArticleSubmit = async (e) => {
     e.preventDefault();
     setSending(true);
     setSuccessMsg('');
     setErrorMsg('');
     try {
-      const data = await submitArticle(article);
+      const res = await fetch('https://naradev-backendup-production.up.railway.app/articles', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Jika perlu token, tambahkan Authorization di sini
+        },
+        body: JSON.stringify({
+          ...article,
+          // admin_id sebaiknya diambil dari backend (JWT), bukan dari frontend
+        }),
+      });
+      const data = await res.json();
       if (data.success) {
         setSuccessMsg('Artikel berhasil dikirim!');
         setArticle({ title: '', slug: '', content: '' });
@@ -68,7 +88,6 @@ export default function AdminDashboard() {
           Selamat datang, {admin ? admin.username : 'Admin'}
         </h1>
         <p className="text-gray-700 mb-6">Anda berhasil login sebagai admin.</p>
-
         <h2 className="text-xl font-semibold mb-4">Daftar Pertanyaan Kontak</h2>
         {loading ? (
           <div>Loading...</div>
@@ -102,45 +121,6 @@ export default function AdminDashboard() {
             </table>
           </div>
         )}
-
-        <h2 className="text-xl font-semibold mt-10 mb-4">Tambah Artikel Baru</h2>
-        <form onSubmit={handleArticleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="title"
-            placeholder="Judul"
-            value={article.title}
-            onChange={handleArticleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
-          <input
-            type="text"
-            name="slug"
-            placeholder="Slug (tanpa spasi)"
-            value={article.slug}
-            onChange={handleArticleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
-          <textarea
-            name="content"
-            placeholder="Konten artikel"
-            value={article.content}
-            onChange={handleArticleChange}
-            className="w-full border p-2 rounded h-32"
-            required
-          />
-          <button
-            type="submit"
-            disabled={sending}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-          >
-            {sending ? 'Mengirim...' : 'Kirim Artikel'}
-          </button>
-          {successMsg && <p className="text-green-600">{successMsg}</p>}
-          {errorMsg && <p className="text-red-600">{errorMsg}</p>}
-        </form>
       </section>
     </main>
   );

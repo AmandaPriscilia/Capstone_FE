@@ -1,72 +1,128 @@
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://naradev-backendup-production.up.railway.app';
 
+const ENDPOINTS = {
+  registerUser: '/auth/register/user',
+  loginUser: '/auth/login/user',
+  loginAdmin: '/auth/login/admin',
+  contacts: '/contacts',
+  articles: '/articles',
+};
+
+async function handleResponse(response) {
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || 'Terjadi kesalahan');
+  }
+  return data;
+}
+
+function getTokenOrThrow() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('Token tidak ditemukan. Silakan login ulang.');
+  }
+  return token;
+}
+
+// User Auth
 export async function registerUser({ username, email, password }) {
-  const response = await fetch(`${API_BASE_URL}/auth/register/user`, {
+  const response = await fetch(`${API_BASE_URL}${ENDPOINTS.registerUser}`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, email, password }),
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || 'Gagal mendaftar');
-  }
-
-  return data;
+  return handleResponse(response);
 }
 
 export async function loginUser({ email, password }) {
-  const response = await fetch(`${API_BASE_URL}/auth/login/user`, {
+  const response = await fetch(`${API_BASE_URL}${ENDPOINTS.loginUser}`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
   });
 
-  const data = await response.json();
+  return handleResponse(response);
+}
 
-  if (!response.ok) {
-    throw new Error(data.message || 'Gagal login');
-  }
+// Admin Auth
+export async function loginAdmin({ email, password }) {
+  const response = await fetch(`${API_BASE_URL}${ENDPOINTS.loginAdmin}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
 
-  // Simpan token ke localStorage atau sessionStorage jika diperlukan
-  // localStorage.setItem('token', data.token);
+  return handleResponse(response);
+}
 
-  return data;
+// Kontak
+export async function sendContactMessage({ fullname, email, phone, subject, message }) {
+  const response = await fetch(`${API_BASE_URL}${ENDPOINTS.contacts}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fullname, email, phone, subject, message }),
+  });
+
+  return handleResponse(response);
 }
 
 export async function fetchContacts() {
-  try {
-    const response = await fetch(`${API_BASE_URL}/contacts`);
-    const data = await response.json();
-    if (response.ok && data.success && Array.isArray(data.data)) {
-      return data.data;
-    } else {
-      return [];
-    }
-  } catch (err) {
-    console.error('Fetch contacts error:', err);
-    return [];
-  }
+  const response = await fetch(`${API_BASE_URL}${ENDPOINTS.contacts}`);
+  return handleResponse(response);
 }
 
-export async function submitArticle(article) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/articles`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(article),
-    });
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.error('Submit article error:', err);
-    return { success: false, message: 'Gagal mengirim artikel.' };
-  }
+// Artikel
+export async function fetchAllArticles() {
+  const response = await fetch(`${API_BASE_URL}${ENDPOINTS.articles}`);
+  return handleResponse(response);
+}
+
+export async function fetchArticleById(id) {
+  const response = await fetch(`${API_BASE_URL}${ENDPOINTS.articles}/${id}`);
+  return handleResponse(response);
+}
+
+export async function createArticle({ title, content }) {
+  const token = getTokenOrThrow();
+  const response = await fetch(`${API_BASE_URL}${ENDPOINTS.articles}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ title, content }),
+  });
+
+  return handleResponse(response);
+}
+
+export async function updateArticle(id, { title, content }) {
+  const token = getTokenOrThrow();
+  const response = await fetch(`${API_BASE_URL}${ENDPOINTS.articles}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ title, content }),
+  });
+
+  return handleResponse(response);
+}
+
+export async function deleteArticle(id) {
+  const token = getTokenOrThrow();
+  const response = await fetch(`${API_BASE_URL}${ENDPOINTS.articles}/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return handleResponse(response);
+}
+export async function fetchArticleBySlug(slug) {
+  const response = await fetch(`${API_BASE_URL}${ENDPOINTS.articles}/slug/${slug}`);
+  return handleResponse(response);
 }

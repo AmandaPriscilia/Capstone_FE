@@ -10,7 +10,7 @@ import TentangPage from './components/tentang/tentangPage';
 import ArticlePage from './components/article/articlePage';
 import UserSignUpPage from './components/auth/user/user-register/user-signup-page';
 import UserLoginPage from './components/auth/user/user-login/user-login-page';
-import AdminDashboard from './components/auth/admin/admin-login/dashboard';
+import AdminDashboardPage from './components/auth/admin/dashboard/dashboard';
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -150,14 +150,14 @@ function App() {
           }
         />
         <Route
-          path="/hayolo"
+          path="/naraadmin"
           element={
             <main>
               <AdminLoginPage />
             </main>
           }
         />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboardPage/>} />
       </Routes>
     </Router>
   );

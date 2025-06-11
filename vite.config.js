@@ -1,11 +1,22 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   base: '/NaraStocksm/',
   server: {
-    allowedHosts: ['https://gakuro.pythonanywhere.com', 'localhost'],
+    host: 'localhost',
+    port: 5173,
+    cors: true,
+    allowedHosts: [
+      'localhost',
+      'gakuro.pythonanywhere.com',
+      'naradev-backendup-production.up.railway.app',
+    ],
+    hmr: {
+      protocol: 'ws',
+      host: 'localhost',
+      port: 5173,
+    },
   },
 });

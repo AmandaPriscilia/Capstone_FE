@@ -1,5 +1,10 @@
 // TentangPresenter.jsx
 import { useEffect, useState } from 'react';
+import priscilia from '../../assets/priscilia.jpg';
+import rofky from '../../assets/rofky.jpg';
+import reyhan from '../../assets/reyhan.png';
+import adrian from '../../assets/adrian.jpg';
+import irfan from '../../assets/irfan.jpg';
 
 export const useTentangPresenter = () => {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -7,10 +12,7 @@ export const useTentangPresenter = () => {
 
   useEffect(() => {
     const text = [
-      'Сегодня 3 декабря 2020 года в Академии цифровых инноваций состоялось вручение сертификатов выпускникам курса Фронтенд-разработки.',
-      'Поздравляем выпускников курса веб-разработки с окончанием обучения и вручением сертификатов!',
-      'Нельзя останавливаться на достигнутом, нужно продолжать идти вперед и изучать новые технологии. Желаем всем выпускникам курса достигнуть всех поставленных целей!',
-      'Коллектив АЦИ выражает огромную благодарность GIZ за поддержку, а также за книги, предоставленные в дар нашей библиотеке!',
+      `NaraStock adalah platform analisis saham berbasis AI yang dirancang khusus untuk membantu investor pemula mengambil keputusan investasi lebih percaya diri. Kami mengubah data pasar yang kompleks menjadi prediksi mingguan sederhana menggunakan algoritma canggih dan data historis terpercaya. Dikembangkan oleh tim profesional muda dari universitas terkemuka Yogyakarta, platform kami menawarkan kemudahan memahami trend pasar tanpa perlu latar belakang finansial yang mendalam. Dengan antarmuka yang intuitif dan penjelasan yang jelas, NaraStock menjadi teman ideal bagi siapa saja yang ingin memulai perjalanan investasi mereka. Setiap prediksi kami dirancang untuk memberikan insight berharga sekaligus mendidik pengguna tentang dasar-dasar analisis pasar.`,
     ];
 
     const data = [
@@ -18,15 +20,15 @@ export const useTentangPresenter = () => {
         name: 'Adrian Ramdhany',
         role: 'Machine Learning',
         university: 'Universitas Negeri Yogyakarta',
-        image: 'https://storage.googleapis.com/a1aa/image/6a3fff81-26e9-4d1b-bd0d-651ce95d72b2.jpg',
-        github: '#',
+        image: adrian,
+        github: '',
         linkedin: '#',
       },
       {
         name: 'Irfan Nur Fahrudin',
         role: 'Machine Learning',
-        university: 'Universitas Gadjah Mada',
-        image: 'https://storage.googleapis.com/a1aa/image/26721275-fe26-4401-c6fd-5f6284f062a0.jpg',
+        university: 'Universitas Mercu Buana Yogyakarta',
+        image: irfan,
         github: '#',
         linkedin: '#',
       },
@@ -34,7 +36,7 @@ export const useTentangPresenter = () => {
         name: 'Priscilia Amanda Regina',
         role: 'Front End Back End',
         university: 'Universitas Mercu Buana Yogyakarta',
-        image: 'https://storage.googleapis.com/a1aa/image/26721275-fe26-4401-c6fd-5f6284f062a0.jpg',
+        image: priscilia,
         github: '#',
         linkedin: '#',
       },
@@ -42,15 +44,15 @@ export const useTentangPresenter = () => {
         name: 'Muchammad Rofky Hazawwaru',
         role: 'Front End Back End',
         university: 'Universitas Mercu Buana Yogyakarta',
-        image: 'https://storage.googleapis.com/a1aa/image/26721275-fe26-4401-c6fd-5f6284f062a0.jpg',
+        image: rofky,
         github: '#',
         linkedin: '#',
       },
       {
         name: 'Reyhan Dwi Wira Allofadieka',
         role: 'Front End Back End',
-        university: 'Universitas Mercu Buana Yogyakarta',
-        image: 'https://storage.googleapis.com/a1aa/image/26721275-fe26-4401-c6fd-5f6284f062a0.jpg',
+        university: 'Universitas Amikom Yogyakarta',
+        image: reyhan,
         github: '#',
         linkedin: '#',
       },

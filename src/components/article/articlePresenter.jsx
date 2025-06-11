@@ -7,7 +7,7 @@
 export const getArticles = async (page, limit) => {
   try {
     const response = await fetch(
-      `http://localhost:5000/articles?page=${page}&limit=${limit}`
+      `https://naradev-backendup-production.up.railway.app/articles?page=${page}&limit=${limit}`,
     );
     if (!response.ok) throw new Error('Gagal mengambil artikel');
     const data = await response.json();

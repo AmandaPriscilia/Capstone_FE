@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-
+import { sendContactMessage } from '../../services/Model.js';
 const useContactPresenter = () => {
   const [formData, setFormData] = useState({
     fullname: '',
@@ -23,7 +22,7 @@ const useContactPresenter = () => {
       ...prevData,
       [name]: value,
     }));
-  
+
     if (errors[name]) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -33,7 +32,7 @@ const useContactPresenter = () => {
   };
 
   const handlePhoneChange = (e) => {
-    let value = e.target.value.replace(/\D/g, ''); 
+    let value = e.target.value.replace(/\D/g, '');
     if (value.startsWith('62')) {
       value = '+' + value;
     } else if (value.startsWith('0')) {
@@ -71,20 +70,18 @@ const useContactPresenter = () => {
       newErrors.message = 'Detail pertanyaan atau kebutuhan wajib diisi.';
     }
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; 
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSuccessMessage(''); 
-    if (!validateForm()) {
-      return; 
-    }
+    setSuccessMessage('');
+    if (!validateForm()) return;
 
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2500)); 
-      console.log('Form submitted:', formData);
+      await sendContactMessage(formData); // Kirim ke backend
+
       setSuccessMessage('Pesan berhasil dikirim! Terima kasih telah menghubungi kami.');
 
       setFormData({
@@ -94,15 +91,14 @@ const useContactPresenter = () => {
         subject: '',
         message: '',
       });
-      setErrors({}); 
+      setErrors({});
     } catch (error) {
       console.error('Error submitting form:', error);
       setErrors({
-        form: 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.',
+        form: error.message || 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.',
       });
     } finally {
       setIsLoading(false);
- 
       window.scrollTo({
         top: 0,
         behavior: 'smooth',

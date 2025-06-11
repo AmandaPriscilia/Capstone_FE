@@ -1,92 +1,121 @@
-import React, { useState } from 'react';
+// admin-login-page.jsx
+import React, { useState, useEffect, useRef } from 'react';
+import AdminLoginPresenter from './admin-login-presenter'; // Pastikan path ini benar
 
-const API_BASE_URL = 'http://localhost:5000'; 
-export default function AdminLoginPage() {
+// Impor useNavigate dari react-router-dom jika Anda menggunakan React Router
+import { useNavigate } from 'react-router-dom';
+
+function AdminLoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const presenter = useRef(new AdminLoginPresenter());
+  const navigate = useNavigate(); // Inisialisasi useNavigate
+
+  useEffect(() => {
+    presenter.current.setView({
+      showErrorMessage: (message) => setErrorMessage(message),
+      clearMessages: () => {
+        setErrorMessage('');
+        setShowSuccessPopup(false);
+      },
+      showLoading: (loading) => setIsLoading(loading),
+      onLoginSuccess: () => {
+        setShowSuccessPopup(true);
+        setEmail('');
+        setPassword('');
+        setErrorMessage('');
+        setTimeout(() => {
+          setShowSuccessPopup(false);
+          navigate('/admin/dashboard'); // Menggunakan navigate dari React Router
+        }, 1500);
+      },
+    });
+  }, [navigate]); // Tambahkan navigate sebagai dependency
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setErrorMessage('');
-    setIsLoading(true);
+    presenter.current.handleLoginAttempt(email, password);
+  };
 
-    try {
-      const res = await fetch(`${API_BASE_URL}/auth/login/admin`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Login gagal');
-
-      // Simpan token dan info admin ke localStorage
-      localStorage.setItem('admin_token', data.token);
-      localStorage.setItem('admin', JSON.stringify({
-        id: data.id,
-        email: data.email,
-        username: data.username,
-      }));
-
-      // Redirect ke halaman dashboard admin
-      window.location.href = '/NaraStocksm/admin/dashboard';
-    } catch (err) {
-      setErrorMessage(err.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
-    <main className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form
-        className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
-        onSubmit={handleSubmit}
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center">Admin Login</h2>
-        {errorMessage && (
-          <div className="bg-red-100 text-red-700 p-2 rounded mb-4 text-center">
-            {errorMessage}
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Admin Login</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="emailInput" className="block text-sm font-medium text-gray-700 mb-1">
+              Email:
+            </label>
+            <input
+              type="email"
+              id="emailInput"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={isLoading}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="admin@example.com"
+            />
           </div>
-        )}
-        <div className="mb-4">
-          <label className="block mb-1 font-semibold" htmlFor="adminEmail">
-            Email
-          </label>
-          <input
-            id="adminEmail"
-            type="email"
-            className="w-full border rounded px-3 py-2"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-            autoFocus
+          <div className="relative">
+            <label htmlFor="passwordInput" className="block text-sm font-medium text-gray-700 mb-1">
+              Password:
+            </label>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              id="passwordInput"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={isLoading}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm pr-10"
+              placeholder="••••••••"
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-500 top-7"
+            >
+              {showPassword ? (
+                <i className="fas fa-eye-slash"></i> // Ikon font awesome jika digunakan
+              ) : (
+                <i className="fas fa-eye"></i> // Ikon font awesome jika digunakan
+              )}
+            </button>
+          </div>
+
+          {errorMessage && <p className="text-red-600 text-sm text-center">{errorMessage}</p>}
+
+          <button
+            type="submit"
             disabled={isLoading}
-          />
+            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            {isLoading ? 'Logging In...' : 'Login'}
+          </button>
+        </form>
+      
+      </div>
+
+      {showSuccessPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+            <h3 className="text-xl font-semibold text-green-600 mb-2">Login Berhasil!</h3>
+            <p className="text-gray-700">Anda akan diarahkan ke dashboard admin...</p>
+          </div>
         </div>
-        <div className="mb-6">
-          <label className="block mb-1 font-semibold" htmlFor="adminPassword">
-            Password
-          </label>
-          <input
-            id="adminPassword"
-            type="password"
-            className="w-full border rounded px-3 py-2"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-            disabled={isLoading}
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-black text-white font-bold py-2 rounded hover:bg-gray-800 transition"
-          disabled={isLoading}
-        >
-          {isLoading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-    </main>
+      )}
+    </div>
   );
 }
+
+export default AdminLoginPage;

@@ -28,7 +28,7 @@ const UserLoginPage = () => {
       },
     });
 
-    return () => { };
+    return () => {};
   }, []);
 
   const handleSubmit = (e) => {

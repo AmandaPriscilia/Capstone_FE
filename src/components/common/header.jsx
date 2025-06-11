@@ -13,16 +13,17 @@ const symbols = [
 function Header({ menuOpen, toggleMenu, setMenuOpen, menuItems }) {
   const [user, setUser] = useState(null);
   const [showOverlay, setShowOverlay] = useState(false);
-  const [notifAll, setNotifAll] = useState([]); // Array untuk semua prediksi
+  const [notifAll, setNotifAll] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [notifCache, setNotifCache] = useState({ date: null, data: [] }); // Tambahkan state cache
   const location = useLocation();
   const navigate = useNavigate();
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
+  const [showNotifPopup, setShowNotifPopup] = useState(false);
 
   useEffect(() => {
     const userStr = localStorage.getItem('user');
     setUser(userStr ? JSON.parse(userStr) : null);
-    // Debug output
     console.log('Loaded user:', userStr);
   }, [location]);
 
@@ -35,25 +36,38 @@ function Header({ menuOpen, toggleMenu, setMenuOpen, menuItems }) {
       navigate('/login');
     }, 1500);
   };
+  useEffect(() => {
+    const fetchPrediksi = async () => {
+      const today = new Date().toLocaleDateString('id-ID');
+      if (notifCache.date === today && notifCache.data.length > 0) return; // Sudah ada cache hari ini
 
-  // Fetch semua prediksi symbol
-  const handleSubscribe = async () => {
+      try {
+        const results = await Promise.all(
+          symbols.map(async (item) => {
+            const res = await fetch(`https://flasknarastock.onrender.com/predict?symbol=${item.symbol}`);
+            const data = await res.json();
+            return { ...data, pair: item.name };
+          }),
+        );
+        setNotifCache({ date: today, data: results });
+        setShowNotifPopup(true); // Tampilkan popup jika sukses
+      } catch {
+        setNotifCache({ date: today, data: [{ error: 'Gagal mengambil notifikasi.' }] });
+      }
+    };
+
+    fetchPrediksi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const handleSubscribe = () => {
     setShowOverlay(true);
-    setLoading(true);
-    setNotifAll([]);
-    try {
-      const results = await Promise.all(
-        symbols.map(async (item) => {
-          const res = await fetch(`http://127.0.0.1:5000/predict?symbol=${item.symbol}`);
-          const data = await res.json();
-          return { ...data, pair: item.name };
-        }),
-      );
-      setNotifAll(results);
-    } catch {
-      setNotifAll([{ error: 'Gagal mengambil notifikasi.' }]);
-    }
+    const today = new Date().toLocaleDateString('id-ID');
     setLoading(false);
+    if (notifCache.date === today && notifCache.data.length > 0) {
+      setNotifAll(notifCache.data);
+    } else {
+      setNotifAll([{ error: 'Data belum tersedia. Silakan coba beberapa saat lagi.' }]);
+    }
   };
 
   const handleCloseOverlay = () => {
@@ -63,6 +77,20 @@ function Header({ menuOpen, toggleMenu, setMenuOpen, menuItems }) {
 
   return (
     <header className="bg-gradient-to-r from-black via-gray-900 to-black w-full sticky top-0 z-50 shadow-lg">
+      {showNotifPopup && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
+          <div className="bg-white rounded-xl shadow-lg px-8 py-6 text-center">
+            <h3 className="text-xl font-semibold mb-2 text-blue-600">Notifikasi Prediksi Hari Ini</h3>
+            <p className="text-gray-700 mb-4">Prediksi market hari ini sudah tersedia. Klik ikon notifikasi untuk melihat detail.</p>
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded"
+              onClick={() => setShowNotifPopup(false)}
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
       {showLogoutPopup && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
           <div className="bg-white rounded-xl shadow-lg px-8 py-6 text-center">
@@ -115,7 +143,8 @@ function Header({ menuOpen, toggleMenu, setMenuOpen, menuItems }) {
                 <div className="mb-3">
                   Login untuk mendapatkan notifikasi update terbaru tentang market.
                 </div>
-                <Link to="/login">
+                {/* Perbaikan di sini: Tambahkan onClick ke Link di overlay notifikasi */}
+                <Link to="/login" onClick={() => setShowOverlay(false)}>
                   <button className="bg-gradient-to-b from-gray-700 to-black text-white text-sm rounded-md px-4 py-2 shadow-md hover:from-gray-600 hover:to-gray-900 transition-all duration-300 flex items-center justify-center">
                     <i className="fas fa-sign-in-alt mr-2"></i> Login
                   </button>
@@ -126,10 +155,10 @@ function Header({ menuOpen, toggleMenu, setMenuOpen, menuItems }) {
         </div>
       )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Menggunakan Grid untuk tata letak 3 kolom yang presisi */}
-        <nav className="relative py-3 md:py-4 grid grid-cols-3 items-center">
+        {/* Nav Container: flex untuk mobile, grid untuk desktop */}
+        <nav className="relative py-3 md:py-4 flex items-center justify-between md:grid md:grid-cols-3 md:gap-4">
           {/* Kolom Kiri: Logo */}
-          <div className="col-span-1 flex items-center justify-start">
+          <div className="flex items-center md:justify-start md:col-span-1">
             <Link
               to="/"
               onClick={() => setMenuOpen(false)}
@@ -150,7 +179,7 @@ function Header({ menuOpen, toggleMenu, setMenuOpen, menuItems }) {
           </div>
 
           {/* Kolom Tengah: Main Menu (sembunyikan di mobile, muncul di desktop) */}
-          <div className="col-span-1 hidden md:flex items-center justify-center">
+          <div className="hidden md:flex items-center md:justify-center md:col-span-1">
             <ul className="flex space-x-4 lg:space-x-8 text-white text-sm select-none">
               {menuItems.map((item) => (
                 <li key={item.name}>
@@ -168,7 +197,7 @@ function Header({ menuOpen, toggleMenu, setMenuOpen, menuItems }) {
           </div>
 
           {/* Kolom Kanan: Notifikasi dan Login/Logout */}
-          <div className="col-span-1 flex items-center justify-end space-x-4">
+          <div className="flex items-center space-x-4 md:justify-end md:col-span-1">
             {/* Notifikasi - Desktop Only */}
             <button
               className="hidden md:flex items-center bg-gradient-to-b from-gray-700 to-black text-white text-xs sm:text-sm rounded-md px-3 sm:px-4 py-2 shadow-md hover:from-gray-600 hover:to-gray-900 transition-all duration-300 transform hover:scale-105"
@@ -177,21 +206,23 @@ function Header({ menuOpen, toggleMenu, setMenuOpen, menuItems }) {
               <i className="fas fa-bell mr-2 text-yellow-400"></i>
             </button>
 
-            {/* Login/Logout */}
-            {user ? (
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 text-white px-3 py-1 rounded ml-2 text-sm md:text-base"
-              >
-                Logout
-              </button>
-            ) : (
-              <Link to="/login">
-                <button className="bg-gradient-to-b from-gray-700 to-black text-white text-sm rounded-md px-4 py-2 shadow-md hover:from-gray-600 hover:to-gray-900 transition-all duration-300 flex items-center justify-center">
-                  <i className="fas fa-sign-in-alt mr-2"></i> Login
+            {/* Login/Logout - Desktop Only */}
+            <div className="hidden md:block">
+              {user ? (
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-600 text-white px-3 py-1 rounded ml-2 text-sm md:text-base"
+                >
+                  Logout
                 </button>
-              </Link>
-            )}
+              ) : (
+                <Link to="/login">
+                  <button className="bg-gradient-to-b from-gray-700 to-black text-white text-sm rounded-md px-4 py-2 shadow-md hover:from-gray-600 hover:to-gray-900 transition-all duration-300 flex items-center justify-center">
+                    <i className="fas fa-sign-in-alt mr-2"></i> Login
+                  </button>
+                </Link>
+              )}
+            </div>
 
             {/* Hamburger Menu - Mobile Only */}
             <button className="md:hidden text-white p-2" onClick={toggleMenu}>
@@ -218,11 +249,9 @@ function Header({ menuOpen, toggleMenu, setMenuOpen, menuItems }) {
                 </li>
               ))}
               <li className="pt-4 px-4 flex flex-col space-y-4">
-                {' '}
-                {/* Added flex-col and space-y-4 here */}
                 {user ? (
                   <>
-                    <div>
+                    <div className="text-center">
                       Welcome, <b>{user.username}</b> {user.email && <span>({user.email})</span>}
                     </div>
                     <button
@@ -233,7 +262,8 @@ function Header({ menuOpen, toggleMenu, setMenuOpen, menuItems }) {
                     </button>
                   </>
                 ) : (
-                  <Link to="/login" className="w-full">
+                  // Perbaikan di sini: Tambahkan onClick ke Link untuk menutup menu mobile
+                  <Link to="/login" className="w-full" onClick={() => setMenuOpen(false)}>
                     <button className="w-full bg-gradient-to-b from-gray-700 to-black text-white text-sm rounded-md px-4 py-2 shadow-md hover:from-gray-600 hover:to-gray-900 transition-all duration-300 flex items-center justify-center">
                       <i className="fas fa-sign-in-alt mr-2"></i> Login
                     </button>
