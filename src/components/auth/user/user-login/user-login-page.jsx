@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import LoginPresenter from './user-login-presenter'; // Import the new LoginPresenter
-import './user-login.css'; // Reusing the same CSS file for styling
+import LoginPresenter from './user-login-presenter';
+import './user-login.css';
 
 const UserLoginPage = () => {
   const [email, setEmail] = useState('');
@@ -11,11 +11,13 @@ const UserLoginPage = () => {
 
   const presenter = useRef(new LoginPresenter());
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showServerPopup, setShowServerPopup] = useState(false);
   useEffect(() => {
     presenter.current.setView({
       showErrorMessage: (message) => setErrorMessage(message),
       clearErrorMessage: () => setErrorMessage(''),
       showLoading: (loading) => setIsLoading(loading),
+      showServerError: () => setShowServerPopup(true),
       onLoginSuccess: () => {
         setShowSuccessPopup(true);
         setEmail('');
@@ -24,7 +26,7 @@ const UserLoginPage = () => {
         setTimeout(() => {
           setShowSuccessPopup(false);
           window.location.href = '/NaraStocksm/prediksi';
-        }, 1500); // Popup tampil 1.5 detik lalu redirect
+        }, 1500);
       },
     });
 
@@ -47,6 +49,20 @@ const UserLoginPage = () => {
           <div className="bg-white rounded-xl shadow-lg px-8 py-6 text-center">
             <h3 className="text-xl font-semibold mb-2 text-green-600">Login Berhasil!</h3>
             <p className="text-gray-700">Anda akan diarahkan ke halaman prediksi...</p>
+          </div>
+        </div>
+      )}
+      {showServerPopup && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 px-4">
+          <div className="bg-white rounded-xl shadow-lg px-8 py-6 text-center max-w-sm w-full">
+            <div className="text-4xl mb-2 text-red-500">
+              <i className="fas fa-server"></i>
+            </div>
+            <h3 className="text-xl font-semibold mb-2 text-red-600">Server Tidak Dapat Diakses</h3>
+            <p className="text-gray-700 mb-4">Server backend sedang off atau tidak dapat dihubungi. Silakan coba lagi beberapa saat lagi.</p>
+            <button className="bg-[#121212] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:brightness-110 transition" onClick={() => setShowServerPopup(false)}>
+              Tutup
+            </button>
           </div>
         </div>
       )}
@@ -75,12 +91,8 @@ const UserLoginPage = () => {
       </section>
       <section className="md:w-1/2 max-w-md mx-auto md:mx-0 relative">
         <div className="flex justify-center mb-6"></div>
-        <h2 className="text-3xl text-center mb-2 font-semibold text-[#121212] font-montserrat">
-          Welcome Back
-        </h2>
-        <p className="text-center text-sm text-gray-600 mb-10">
-          Enter your email and password to log in
-        </p>
+        <h2 className="text-3xl text-center mb-2 font-semibold text-[#121212] font-montserrat">Welcome Back</h2>
+        <p className="text-center text-sm text-gray-600 mb-10">Enter your email and password to log in</p>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label className="block mb-1 text-sm text-gray-900 font-normal" htmlFor="emailInput">
@@ -109,10 +121,7 @@ const UserLoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               disabled={isLoading}
             />
-            <span
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 cursor-pointer password-toggle-icon"
-              onClick={togglePasswordVisibility}
-            >
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 cursor-pointer password-toggle-icon" onClick={togglePasswordVisibility}>
               <i className={showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'}></i>
             </span>
           </div>
@@ -121,11 +130,7 @@ const UserLoginPage = () => {
               {errorMessage}
             </div>
           )}
-          <button
-            className="w-full bg-[#121212] text-white font-semibold rounded-lg py-3 text-sm hover:brightness-110 transition btn-gradient-transition"
-            type="submit"
-            disabled={isLoading}
-          >
+          <button className="w-full bg-[#121212] text-white font-semibold rounded-lg py-3 text-sm hover:brightness-110 transition btn-gradient-transition" type="submit" disabled={isLoading}>
             {isLoading ? 'Logging In...' : 'Log In'}
           </button>
         </form>

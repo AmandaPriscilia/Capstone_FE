@@ -1,4 +1,3 @@
-// components/home/home.presenter.js
 import { useNavigate } from 'react-router-dom';
 
 function useHomePresenter() {
@@ -8,8 +7,13 @@ function useHomePresenter() {
     navigate('/prediksi');
   };
 
+  const handlePelajariFiturClick = () => {
+    navigate('/fitur');
+  };
+
   return {
     handleMulaiPrediksiClick,
+    handlePelajariFiturClick, 
   };
 }
 

@@ -6,18 +6,17 @@ export default function AdminDashboard() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Ambil data admin dari localStorage
+
   const adminStr = localStorage.getItem('admin');
   const admin = adminStr ? JSON.parse(adminStr) : null;
 
-  // Redirect ke login jika belum login
+ 
   useEffect(() => {
     if (!admin) {
       navigate('/NaraStocksm/admin/login');
     }
   }, [admin, navigate]);
 
-  // Fetch data contacts dari backend
   useEffect(() => {
     const fetchContacts = async () => {
       try {
@@ -45,12 +44,12 @@ export default function AdminDashboard() {
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Handler input artikel
+
   const handleArticleChange = (e) => {
     setArticle({ ...article, [e.target.name]: e.target.value });
   };
 
-  // Submit artikel
+ 
   const handleArticleSubmit = async (e) => {
     e.preventDefault();
     setSending(true);
@@ -61,11 +60,11 @@ export default function AdminDashboard() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Jika perlu token, tambahkan Authorization di sini
+         
         },
         body: JSON.stringify({
           ...article,
-          // admin_id sebaiknya diambil dari backend (JWT), bukan dari frontend
+      
         }),
       });
       const data = await res.json();

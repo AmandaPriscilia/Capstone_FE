@@ -5,11 +5,10 @@
 
 body {
     @apply font-sans;
-  -webkit-font-smoothing: antialiased; /* Untuk rendering font yang lebih baik */
-  -moz-osx-font-smoothing: grayscale; /* Untuk rendering font yang lebih baik */
+  -webkit-font-smoothing: antialiased; 
+  -moz-osx-font-smoothing: grayscale; 
 }
 
-/* Animate fade-in and slide-up for articles */
 @keyframes fadeSlideUp {
   0% {
     opacity: 0;
@@ -25,7 +24,7 @@ body {
   animation: fadeSlideUp 0.6s ease forwards;
 }
 
-/* Smooth scale and shadow on hover for cards */
+
 .card-hover:hover {
   transform: scale(1.03);
   box-shadow: 0 20px 30px rgba(124, 255, 54, 0.3);
@@ -37,8 +36,7 @@ body {
 .underline-anim {
   position: relative;
   overflow: hidden;
-  /* Warna teks dikelola oleh Tailwind: text-white */
-  /* font-weight dikelola oleh Tailwind: font-normal, kemudian hover:underline-anim akan ada override*/
+
 }
 
 .underline-anim::after {
@@ -62,15 +60,15 @@ body {
   border-radius: 6px;
   padding: 4px 8px;
   font-weight: 600;
-  color: #4b5563; /* Tailwind gray-600 */
+  color: #4b5563; 
   background-color: transparent;
   border: 1px solid transparent;
   font-size: 14px;
 }
 
-.pagination-btn:hover:not([aria-current="page"]):not(:disabled) { /* Hanya berlaku jika bukan halaman saat ini dan tidak dinonaktifkan */
+.pagination-btn:hover:not([aria-current="page"]):not(:disabled) { 
   background-color: #7cff36;
-  color: #111827; /* Tailwind gray-900 */
+  color: #111827; 
   border-color: #7cff36;
 }
 
@@ -97,7 +95,7 @@ body {
   font-weight: 600;
   box-shadow: 0 0 8px #7cff36aa;
   font-size: 14px;
-  border: none; /* Pastikan tidak ada border bawaan */
+  border: none; 
 }
 
 .subscribe-btn:hover {
@@ -109,11 +107,11 @@ body {
 /* Icon buttons hover with green */
 .icon-btn {
   transition: color 0.3s ease, transform 0.3s ease;
-  color: #6b7280; /* Tailwind gray-500 */
+  color: #6b7280; 
   font-size: 16px;
-  background: none; /* Hapus background default button */
-  border: none; /* Hapus border default button */
-  padding: 0; /* Hapus padding default button */
+  background: none; 
+  border: none; 
+  padding: 0; 
   cursor: pointer;
 }
 
@@ -143,10 +141,10 @@ body {
   position: relative;
   overflow: hidden;
   transition: color 0.3s ease;
-  background: none; /* Hapus background default button */
-  border: none; /* Hapus border default button */
-  padding: 0; /* Hapus padding default button */
-  text-align: left; /* Sesuaikan alignment jika diperlukan */
+  background: none; 
+  border: none; 
+  padding: 0; 
+  text-align: left; 
 }
 
 .selengkapnya-btn:hover {
@@ -161,27 +159,3 @@ body {
 .selengkapnya-btn:hover i {
   transform: translateX(4px);
 }
-
-/* Override Tailwind text sizes to px - Disesuaikan atau dihapus jika menggunakan konfigurasi Tailwind */
-/* Sebaiknya, Anda mengonfigurasi ukuran font ini di tailwind.config.js */
-/*
-h2 {
-  font-size: 18px;
-  font-weight: 600;
-}
-h3 {
-  font-size: 18px;
-  font-weight: 600;
-}
-p {
-  font-size: 14px;
-}
-p.text-\[13px\] {
-  font-size: 13px;
-  font-weight: 600;
-}
-nav a {
-  font-size: 14px;
-  font-weight: 400;
-}
-*/

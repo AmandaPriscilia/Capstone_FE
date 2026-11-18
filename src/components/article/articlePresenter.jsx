@@ -1,3 +1,5 @@
+import { getDummyArticles } from '../data/articleDummy';
+
 /**
  * Mengambil daftar artikel dari backend Express.
  * @param {number} page - Nomor halaman yang diminta.
@@ -15,6 +17,7 @@ export const getArticles = async (page, limit) => {
     return data.data || [];
   } catch (error) {
     console.error(error);
-    return [];
+    // BE error -> kembalikan dummy data supaya desain tetap terlihat
+    return getDummyArticles(page, limit);
   }
 };

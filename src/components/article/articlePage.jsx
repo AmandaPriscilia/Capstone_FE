@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; 
 import { getArticles } from './articlePresenter';
 import './article.css';
 
@@ -8,16 +9,16 @@ const ArticlePage = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalArticles, setTotalArticles] = useState(0);
-  const articlesPerPage = 3; // Maksimal 3 berita per halaman
+  const articlesPerPage = 3; 
 
   useEffect(() => {
     const fetchArticleData = async () => {
       setLoading(true);
       setError(null);
       try {
-        // Ambil data dari backend
+   
         const response = await getArticles(currentPage, articlesPerPage);
-        // Jika backend mengirim { data: [...], total: ... }
+   
         const dataArr = response.data || response;
         setTotalArticles(response.total || response.count || dataArr.length);
         const mapped = dataArr.map((item) => ({
@@ -167,10 +168,14 @@ const ArticlePage = () => {
                     </button>
                   </div>
                 </div>
-                <button className="selengkapnya-btn mt-4 self-start focus:outline-none text-sm font-semibold">
+              
+                <Link
+                  to={`/article/${article.id}`} 
+                  className="selengkapnya-btn mt-4 self-start focus:outline-none text-sm font-semibold"
+                >
                   Selengkapnya
                   <i className="fas fa-arrow-right"></i>
-                </button>
+                </Link>
               </div>
             </article>
           ))}

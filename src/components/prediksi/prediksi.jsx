@@ -52,7 +52,7 @@ export default function Prediksi() {
   const [user, setUser] = useState(null);
   const location = useLocation();
 
-  const url = 'https://flasknarastock.onrender.com';
+  const url = 'http://70.153.80.36:5000.com';
   const symbol = currencyPairs[selectedPair];
 
   useEffect(() => {
@@ -217,7 +217,7 @@ export default function Prediksi() {
           </div>
         </div>
       )}
-      {/* HEADER YANG TELAH DIPERBAIKI: Judul di tengah, "Welcome" di bawah judul untuk mobile, di kanan atas untuk desktop */}
+    
       <header className="flex flex-col items-center justify-center mb-8 px-4 py-2 relative">
         <h1 className="text-xl sm:text-2xl font-bold mb-2">Halaman Prediksi</h1>
         {user && (
@@ -291,7 +291,6 @@ export default function Prediksi() {
           </div>
         )}
 
-        {/* --- Bagian Chart Candlestick --- */}
         {chartData.length > 0 ? (
           <div className="bg-gray-800 p-2 sm:p-4 rounded-lg shadow-lg mb-8">
             <div className="w-full">

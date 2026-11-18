@@ -31,12 +31,11 @@ class AdminLoginPresenter {
     }
 
     try {
-      // Panggil fungsi loginAdmin dari model
+    
       const data = await loginAdmin({ email, password });
       console.log('Admin logged in successfully:', data);
 
-      // Simpan token atau info admin di localStorage jika diperlukan
-      // Contoh:
+
       localStorage.setItem('adminToken', data.token);
       localStorage.setItem(
         'adminInfo',
@@ -48,18 +47,17 @@ class AdminLoginPresenter {
         }),
       );
 
-      // Beri tahu View tentang kesuksesan login
+    
       this.view.onLoginSuccess();
     } catch (err) {
-      // Tangani error dari model
+      
       this.view.showErrorMessage(err.message || 'Login gagal. Email atau password salah.');
     } finally {
-      // Hentikan loading
+    
       this.view.showLoading(false);
     }
   }
 
-  // Helper function untuk validasi email
   isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);

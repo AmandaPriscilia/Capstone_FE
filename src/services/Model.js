@@ -24,7 +24,7 @@ function getTokenOrThrow() {
   return token;
 }
 
-// User Auth
+
 export async function registerUser({ username, email, password }) {
   const response = await fetch(`${API_BASE_URL}${ENDPOINTS.registerUser}`, {
     method: 'POST',
@@ -45,7 +45,7 @@ export async function loginUser({ email, password }) {
   return handleResponse(response);
 }
 
-// Admin Auth
+
 export async function loginAdmin({ email, password }) {
   const response = await fetch(`${API_BASE_URL}${ENDPOINTS.loginAdmin}`, {
     method: 'POST',
@@ -56,7 +56,6 @@ export async function loginAdmin({ email, password }) {
   return handleResponse(response);
 }
 
-// Kontak
 export async function sendContactMessage({ fullname, email, phone, subject, message }) {
   const response = await fetch(`${API_BASE_URL}${ENDPOINTS.contacts}`, {
     method: 'POST',
@@ -72,7 +71,7 @@ export async function fetchContacts() {
   return handleResponse(response);
 }
 
-// Artikel
+
 export async function fetchAllArticles() {
   const response = await fetch(`${API_BASE_URL}${ENDPOINTS.articles}`);
   return handleResponse(response);
@@ -122,7 +121,9 @@ export async function deleteArticle(id) {
 
   return handleResponse(response);
 }
+
 export async function fetchArticleBySlug(slug) {
   const response = await fetch(`${API_BASE_URL}${ENDPOINTS.articles}/slug/${slug}`);
   return handleResponse(response);
 }
+

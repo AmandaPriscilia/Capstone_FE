@@ -1,4 +1,3 @@
-/* Warna tulisan toolbar export jadi hitam */
 .apexcharts-toolbar svg,
 .apexcharts-toolbar button,
 .apexcharts-toolbar span {
@@ -7,17 +6,16 @@
   stroke: rgba(255, 255, 255, 0) !important;
 }
 
-/* Hover background overlay (tooltip background) */
+
 .apexcharts-tooltip, .apexcharts-tooltip-series-group, .apexcharts-xaxistooltip, .apexcharts-yaxistooltip {
-  background: rgba(255, 255, 255, 0.9) !important; /* Latar belakang tooltip putih */
-  color: rgb(0, 0, 0) !important; /* Teks tooltip hitam agar kontras */
+  background: rgba(255, 255, 255, 0.9) !important; 
+  color: rgb(0, 0, 0) !important; 
 }
 
 .apexcharts-tooltip-text {
-  color: rgb(0, 0, 0) !important; /* Memastikan teks di dalam tooltip juga hitam */
+  color: rgb(0, 0, 0) !important;
 }
 
-/* Toolbar button hover background (optional) */
 .apexcharts-toolbar button:hover {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }

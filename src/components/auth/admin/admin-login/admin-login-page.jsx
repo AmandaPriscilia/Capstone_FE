@@ -1,8 +1,8 @@
-// admin-login-page.jsx
-import React, { useState, useEffect, useRef } from 'react';
-import AdminLoginPresenter from './admin-login-presenter'; // Pastikan path ini benar
 
-// Impor useNavigate dari react-router-dom jika Anda menggunakan React Router
+import React, { useState, useEffect, useRef } from 'react';
+import AdminLoginPresenter from './admin-login-presenter';
+
+
 import { useNavigate } from 'react-router-dom';
 
 function AdminLoginPage() {
@@ -14,7 +14,7 @@ function AdminLoginPage() {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const presenter = useRef(new AdminLoginPresenter());
-  const navigate = useNavigate(); // Inisialisasi useNavigate
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     presenter.current.setView({
@@ -31,11 +31,11 @@ function AdminLoginPage() {
         setErrorMessage('');
         setTimeout(() => {
           setShowSuccessPopup(false);
-          navigate('/admin/dashboard'); // Menggunakan navigate dari React Router
+          navigate('/admin/dashboard'); 
         }, 1500);
       },
     });
-  }, [navigate]); // Tambahkan navigate sebagai dependency
+  }, [navigate]); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -86,9 +86,9 @@ function AdminLoginPage() {
               className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-500 top-7"
             >
               {showPassword ? (
-                <i className="fas fa-eye-slash"></i> // Ikon font awesome jika digunakan
+                <i className="fas fa-eye-slash"></i> 
               ) : (
-                <i className="fas fa-eye"></i> // Ikon font awesome jika digunakan
+                <i className="fas fa-eye"></i> 
               )}
             </button>
           </div>

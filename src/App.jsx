@@ -8,9 +8,11 @@ import Prediksi from './components/prediksi/prediksi';
 import ContactPage from './components/contact/contactPage';
 import TentangPage from './components/tentang/tentangPage';
 import ArticlePage from './components/article/articlePage';
+import ArticleDetailPage from './components/showArticle/showArticlePage';
 import UserSignUpPage from './components/auth/user/user-register/user-signup-page';
 import UserLoginPage from './components/auth/user/user-login/user-login-page';
 import AdminDashboardPage from './components/auth/admin/dashboard/dashboard';
+import FiturPage from './components/fitur/fitur-page';
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -29,7 +31,6 @@ function App() {
   return (
     <Router basename="/NaraStocksm">
       <Routes>
-        {/* Semua route user, render header & footer */}
         <Route
           path="/"
           element={
@@ -42,6 +43,23 @@ function App() {
               />
               <main>
                 <HomePage />
+              </main>
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/fitur"
+          element={
+            <>
+              <Header
+                menuOpen={menuOpen}
+                toggleMenu={toggleMenu}
+                setMenuOpen={setMenuOpen}
+                menuItems={menuItems}
+              />
+              <main>
+                <FiturPage />
               </main>
               <Footer />
             </>
@@ -116,6 +134,23 @@ function App() {
           }
         />
         <Route
+          path="/article/:id"
+          element={
+            <>
+              <Header
+                menuOpen={menuOpen}
+                toggleMenu={toggleMenu}
+                setMenuOpen={setMenuOpen}
+                menuItems={menuItems}
+              />
+              <main>
+                <ArticleDetailPage />
+              </main>
+              <Footer />
+            </>
+          }
+        />
+        <Route
           path="/signup"
           element={
             <>
@@ -157,7 +192,7 @@ function App() {
             </main>
           }
         />
-        <Route path="/admin/dashboard" element={<AdminDashboardPage/>} />
+        <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
       </Routes>
     </Router>
   );
