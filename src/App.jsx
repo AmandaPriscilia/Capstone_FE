@@ -29,18 +29,13 @@ function App() {
   ];
 
   return (
-    <Router basename="/NaraStocksm">
+    <Router basename="/">
       <Routes>
         <Route
           path="/"
           element={
             <>
-              <Header
-                menuOpen={menuOpen}
-                toggleMenu={toggleMenu}
-                setMenuOpen={setMenuOpen}
-                menuItems={menuItems}
-              />
+              <Header menuOpen={menuOpen} toggleMenu={toggleMenu} setMenuOpen={setMenuOpen} menuItems={menuItems} />
               <main>
                 <HomePage />
               </main>
@@ -52,12 +47,7 @@ function App() {
           path="/fitur"
           element={
             <>
-              <Header
-                menuOpen={menuOpen}
-                toggleMenu={toggleMenu}
-                setMenuOpen={setMenuOpen}
-                menuItems={menuItems}
-              />
+              <Header menuOpen={menuOpen} toggleMenu={toggleMenu} setMenuOpen={setMenuOpen} menuItems={menuItems} />
               <main>
                 <FiturPage />
               </main>
@@ -69,12 +59,7 @@ function App() {
           path="/prediksi"
           element={
             <>
-              <Header
-                menuOpen={menuOpen}
-                toggleMenu={toggleMenu}
-                setMenuOpen={setMenuOpen}
-                menuItems={menuItems}
-              />
+              <Header menuOpen={menuOpen} toggleMenu={toggleMenu} setMenuOpen={setMenuOpen} menuItems={menuItems} />
               <main>
                 <Prediksi />
               </main>
@@ -86,12 +71,7 @@ function App() {
           path="/contact"
           element={
             <>
-              <Header
-                menuOpen={menuOpen}
-                toggleMenu={toggleMenu}
-                setMenuOpen={setMenuOpen}
-                menuItems={menuItems}
-              />
+              <Header menuOpen={menuOpen} toggleMenu={toggleMenu} setMenuOpen={setMenuOpen} menuItems={menuItems} />
               <main>
                 <ContactPage />
               </main>
@@ -103,12 +83,7 @@ function App() {
           path="/tentang"
           element={
             <>
-              <Header
-                menuOpen={menuOpen}
-                toggleMenu={toggleMenu}
-                setMenuOpen={setMenuOpen}
-                menuItems={menuItems}
-              />
+              <Header menuOpen={menuOpen} toggleMenu={toggleMenu} setMenuOpen={setMenuOpen} menuItems={menuItems} />
               <main>
                 <TentangPage />
               </main>
@@ -120,12 +95,7 @@ function App() {
           path="/article"
           element={
             <>
-              <Header
-                menuOpen={menuOpen}
-                toggleMenu={toggleMenu}
-                setMenuOpen={setMenuOpen}
-                menuItems={menuItems}
-              />
+              <Header menuOpen={menuOpen} toggleMenu={toggleMenu} setMenuOpen={setMenuOpen} menuItems={menuItems} />
               <main>
                 <ArticlePage />
               </main>
@@ -137,12 +107,7 @@ function App() {
           path="/article/:id"
           element={
             <>
-              <Header
-                menuOpen={menuOpen}
-                toggleMenu={toggleMenu}
-                setMenuOpen={setMenuOpen}
-                menuItems={menuItems}
-              />
+              <Header menuOpen={menuOpen} toggleMenu={toggleMenu} setMenuOpen={setMenuOpen} menuItems={menuItems} />
               <main>
                 <ArticleDetailPage />
               </main>
@@ -154,12 +119,7 @@ function App() {
           path="/signup"
           element={
             <>
-              <Header
-                menuOpen={menuOpen}
-                toggleMenu={toggleMenu}
-                setMenuOpen={setMenuOpen}
-                menuItems={menuItems}
-              />
+              <Header menuOpen={menuOpen} toggleMenu={toggleMenu} setMenuOpen={setMenuOpen} menuItems={menuItems} />
               <main>
                 <UserSignUpPage />
               </main>
@@ -171,12 +131,7 @@ function App() {
           path="/login"
           element={
             <>
-              <Header
-                menuOpen={menuOpen}
-                toggleMenu={toggleMenu}
-                setMenuOpen={setMenuOpen}
-                menuItems={menuItems}
-              />
+              <Header menuOpen={menuOpen} toggleMenu={toggleMenu} setMenuOpen={setMenuOpen} menuItems={menuItems} />
               <main>
                 <UserLoginPage />
               </main>
