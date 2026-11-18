@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import priscilia from '../../assets/priscilia.jpg';
 import rofky from '../../assets/rofky.jpg';
-import reyhan from '../../assets/reyhan.png';
+import reyhan from '../../assets/Reyhan.png';
 import adrian from '../../assets/adrian.jpg';
 import irfan from '../../assets/irfan.jpg';
 
