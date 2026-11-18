@@ -25,7 +25,7 @@ const UserLoginPage = () => {
         setErrorMessage('');
         setTimeout(() => {
           setShowSuccessPopup(false);
-          window.location.href = '/NaraStocksm/prediksi';
+          window.location.href = '/prediksi';
         }, 1500);
       },
     });
@@ -136,7 +136,7 @@ const UserLoginPage = () => {
         </form>
         <p className="text-center text-gray-600 text-sm mt-10">
           Don't have an account?
-          <a className="font-semibold text-black hover:underline" href="/NaraStocksm/signup">
+          <a className="font-semibold text-black hover:underline" href="/signup">
             Sign Up
           </a>
         </p>
